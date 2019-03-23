@@ -46,8 +46,8 @@ Example Playbook
            - product: 'SUSE-Manager-Server'
              version: '4.0'
              key: '123SUMAKEY34'
-           - sle-module-web-scripting
-           - sle-module-python2
+           - product: sle-module-web-scripting
+           - product: sle-module-python2
 ```
 
 License
