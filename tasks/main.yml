@@ -1,0 +1,46 @@
+---
+# tasks file for b1-systems.suseconnect
+- name: Check If SUSEConnect Is Available
+  stat:
+    path: "{{ suseconnect_binary }}"
+  register: suseconnect_bin_check
+
+- fail:
+    msg: 'This role only works on SLES!'
+  when: not suseconnect_bin_check.stat.executable
+
+- name: Save Registration Status Into Temp Var
+  command: "{{ suseconnect_binary }} -s"
+  register: _suseconnect_status
+  changed_when: False
+
+- name: Convert Registration Status Into Usable Data Structure
+  set_fact:
+    suseconnect_status: "{{ suseconnect_status | combine( { item['identifier']: { 'status': item['status'], 'version': item['version'], 'arch': item['arch'] } } ) }}"
+  with_items: "{{ _suseconnect_status['stdout'] }}"
+
+- name: Generate List Of Product Names
+  set_fact:
+    suseconnect_product_list: "{{ suseconnect_products | map(attribute='product') | list }}"
+
+- name: Add Subscriptions
+  command: "{{ suseconnect_binary }} -p {{ item['product'] | default(ansible_distribution) }}/{{ item['version'] | default(ansible_distribution_version) }}/{{ item['arch'] | default(ansible_machine) }}{% if item['key'] is defined %} -r {{ item['key'] }}{% endif %}"
+  when:
+    - ( suseconnect_status[item['product'] | default(ansible_distribution)] is not defined or
+      ( suseconnect_status[item['product'] | default(ansible_distribution)]['status'] != 'Registered' or
+      ( item['version'] is defined and suseconnect_status[item['product'] | default(ansible_distribution)]['version']|string != item['version']|string ))) or
+      suseconnect_reregister
+  with_items: "{{ suseconnect_products }}"
+
+- name: Remove Subscriptions
+  command: "{{ suseconnect_binary }} -d -p {{ item['key'] | default(ansible_distribution) }}/{{ item['value']['version'] | default(ansible_distribution_version) }}/{{ item['value']['arch'] | default(ansible_machine) }}"
+  when:
+    - suseconnect_remove_subscriptions
+    - item['key'] not in suseconnect_product_list
+    - suseconnect_product_list | length > 0
+  with_dict: "{{ suseconnect_status }}"
+
+- name: Deregister System
+  command: "{{ suseconnect_binary }} -d"
+  when:
+    - suseconnect_product_list | length == 0
