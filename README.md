@@ -37,7 +37,7 @@ Example Playbook
 - hosts: servers
   roles:
      - role: b1-systems.suseconnect
-       vars
+       vars:
          suseconnect_os_key: '12345ABCDE'
          suseconnect_products:
            - product: 'sle-sdk'
