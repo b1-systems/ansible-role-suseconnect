@@ -20,7 +20,6 @@ Without extra key
 | Development Tools Module              | sle-module-development-tools         | 15.1            |
 | Python 2 Module                       | sle-module-python2                   | 15.1            |
 | Server Applications Module            | sle-module-server-applications       | 15.1            |
-| SUSE Manager Server Module            | sle-module-suse-manager-server       | 4.0             |
 
 Need extra key
 --------------
@@ -38,4 +37,5 @@ Need extra key
 | SUSE Enterprise Storage               | ses                                  | 4               |
 | SUSE Manager Proxy                    | SUSE-Manager-Proxy                   | 3.1             |
 | SUSE Manager Server                   | SUSE-Manager-Server                  | 3.1             |
+| SUSE Manager Server Module            | sle-module-suse-manager-server       | 4.0             |
 | SUSE OpenStack Cloud                  | suse-openstack-cloud                 | 7               |
