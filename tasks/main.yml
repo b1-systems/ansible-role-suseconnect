@@ -35,7 +35,13 @@
 
 - name: Convert Registration Status Into Usable Data Structure
   set_fact:
-    suseconnect_status: "{{ suseconnect_status | combine( { item['identifier']: { 'status': item['status'], 'version': item['version'], 'arch': item['arch'] } } ) }}"
+    suseconnect_status: "{{ suseconnect_status | combine( {
+      item['identifier']: {
+        'status': item['status'],
+        'version': item['version'],
+        'arch': item['arch']
+      }
+    } ) }}"
   with_items: "{{ _suseconnect_status['stdout'] | default([]) }}"
 
 - name: Generate List Of Product Names
@@ -43,7 +49,12 @@
     suseconnect_product_list: "{{ suseconnect_products | map(attribute='product') | list }}"
 
 - name: Add Subscriptions
-  command: "{{ suseconnect_binary }} -p {{ item['product'] | default(ansible_distribution) }}/{{ item['version'] | default(ansible_distribution_version) }}/{{ item['arch'] | default(ansible_machine) }}{% if item['key'] is defined %} -r {{ item['key'] }}{% endif %}"
+  command: |
+    {{ suseconnect_binary }} -p
+    {{- item['product'] | default(ansible_distribution) }}/
+    {{- item['version'] | default(ansible_distribution_version) }}/
+    {{- item['arch'] | default(ansible_machine) }}
+    {%- if item['key'] is defined %} -r {{ item['key'] }}{% endif %}
   when:
     - ( suseconnect_status[item['product'] | default(ansible_distribution)] is not defined or
       ( suseconnect_status[item['product'] | default(ansible_distribution)]['status'] != 'Registered' or
@@ -52,7 +63,11 @@
   with_items: "{{ suseconnect_products }}"
 
 - name: Remove Subscriptions
-  command: "{{ suseconnect_binary }} -d -p {{ item['key'] | default(ansible_distribution) }}/{{ item['value']['version'] | default(ansible_distribution_version) }}/{{ item['value']['arch'] | default(ansible_machine) }}"
+  command: |
+    {{ suseconnect_binary }} -d -p
+    {{- item['key'] | default(ansible_distribution) }}/
+    {{- item['value']['version'] | default(ansible_distribution_version) }}/
+    {{- item['value']['arch'] | default(ansible_machine) }}
   when:
     - suseconnect_remove_subscriptions
     - item['key'] not in suseconnect_product_list
