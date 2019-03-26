@@ -6,7 +6,7 @@ Use this role to connect a SUSE Linux system to the SUSE Customer Center or a lo
 Requirements
 ------------
 
-You'll need the registration key that came with your SUSE subscription. For some products you'll need extra registration keys. You'll also need to know the internal product name of the product you're trying to register. I'll try to provide a full list in a README file.
+You'll need the registration key that came with your SUSE subscription. For some products you'll need extra registration keys. You'll also need to know the internal product name of the product you're trying to register. I'll try to provide a full list in [PRODUCTS.md](PRODUCTS.md).
 
 Role Variables
 --------------
