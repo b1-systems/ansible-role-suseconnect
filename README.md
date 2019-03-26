@@ -13,17 +13,21 @@ Role Variables
 
 You can set the following variables:
 
-    suseconnect_products:             # list, products that should be activated on the target system
-      - product:                      # string. internal product name, see PRODUCTS.md for a list
-        version:                      # string, product version that should be activated, defaults to the major version of the base os
-        arch:                         # string, architecture of the product to be actived, defaults to the arch of the OS (ansible_machine)
-        key:                          # string, if the product needs an additional registration key
-    suseconnect_reregister:           # bool, register all products regardless of current status
-    suseconnect_remove_subscriptions: # bool, remove currently registered products, absent in suseconnect_products
+| Variable                            | Type   | Description                                                                                 |
+|-------------------------------------|--------|---------------------------------------------------------------------------------------------|
+| `suseconnect_products:`             | list   | products that should be activated on the target system                                      |
+| `  - product:`                      | string | internal product name, see [PRODUCTS.md](PRODUCTS.md) for a list                            |
+| `    version:`                      | string | product version that should be activated, defaults to the major version of the base os      |
+| `    arch:`                         | string | architecture of the product to be actived, defaults to the arch of the OS (ansible_machine) |
+| `    key:`                          | string | if the product needs an additional registration key                                         |
+| `suseconnect_reregister:`           | bool   | register all products regardless of current status                                          |
+| `suseconnect_remove_subscriptions:` | bool   | remove currently registered products, absent in `suseconnect_products`                      |
 
 This variable is used, but should not be set by the user:
 
-    suseconnect_binary:     # string, path of the SUSEConnect binary
+| Variable                            | Type   | Description                                                                                 |
+|-------------------------------------|--------|---------------------------------------------------------------------------------------------|
+| `suseconnect_binary:`               | string | path of the SUSEConnect binary                                                              |
 
 Dependencies
 ------------
@@ -38,16 +42,14 @@ Example Playbook
   roles:
      - role: b1-systems.suseconnect
        vars:
-         suseconnect_os_key: '12345ABCDE'
          suseconnect_products:
-           - product: 'sle-sdk'
-             version: '12.2'
-             arch: 'x86_64'
            - product: 'SUSE-Manager-Server'
              version: '4.0'
              key: '123SUMAKEY34'
-           - product: sle-module-web-scripting
-           - product: sle-module-python2
+           - product: 'sle-module-web-scripting'
+             version: '15.1'
+           - product: 'sle-module-python2'
+             version: '15.1'
 ```
 
 License
