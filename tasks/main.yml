@@ -69,7 +69,7 @@
     {{- item['value']['version'] | default(ansible_distribution_version) }}/
     {{- item['value']['arch'] | default(ansible_machine) }}
   when:
-    - suseconnect_remove_subscriptions
+    - suseconnect_remove_subscriptions | bool
     - item['key'] not in suseconnect_product_list
     - suseconnect_product_list | length > 0
   with_dict: "{{ suseconnect_status }}"
