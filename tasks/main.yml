@@ -78,3 +78,4 @@
   command: "{{ suseconnect_binary }} -d"
   when:
     - suseconnect_product_list | length == 0
+    - suseconnect_status['SLES']['status'] != 'Not Registered'
