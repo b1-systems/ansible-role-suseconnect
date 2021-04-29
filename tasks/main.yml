@@ -26,6 +26,13 @@
       ( suseconnect_bin_check.stat.xusr is defined and not suseconnect_bin_check.stat.xusr)
 
 
+# Merge default products with host additional products
+
+- name: merge default products with additional products
+  set_fact:
+    suseconnect_products: "{{ suseconnect_products_default + suseconnect_products_additional | default([]) }}"
+
+
 # Do Stuff
 
 - name: Save Registration Status Into Temp Var
