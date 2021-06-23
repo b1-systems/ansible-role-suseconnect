@@ -26,6 +26,7 @@ Need extra key
 
 | Product                               | Internal Name                        | Example Version |
 |---------------------------------------|--------------------------------------|-----------------|
+| Suse Linux Enterprise Server          | SLES                                 | 15.3
 | Magnum Orchestration                  | openstack-cloud-magnum-orchestration | 7               |
 | SLE High Availability Extension       | sle-ha                               | 12.2            |
 | SLE HA GEO Extension                  | sle-ha-geo                           | 12.2            |
