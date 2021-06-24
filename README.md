@@ -34,22 +34,36 @@ Dependencies
 
 None.
 
-Example Playbook
-----------------
+Example Task
+------------
+
+Register a SLES system and activate a bunch of extensions:
 
 ```yaml
-- hosts: servers
-  roles:
-     - role: b1-systems.suseconnect
-       vars:
-         suseconnect_products:
-           - product: 'SUSE-Manager-Server'
-             version: '4.0'
-             key: '123SUMAKEY34'
-           - product: 'sle-module-web-scripting'
-             version: '15.1'
-           - product: 'sle-module-python2'
-             version: '15.1'
+- name: Register with SCC
+  include_role:
+    name: b1-systems.suseconnect
+  vars:
+    suseconnect_products:
+      - product: 'SLES'
+        version: '{{ ansible_distribution_version }}'
+        key: '{{ sles_registration_key }}'
+      - product: 'sle-module-basesystem'
+        version: '{{ ansible_distribution_version }}'
+      - product: 'sle-module-server-applications'
+        version: '{{ ansible_distribution_version }}'
+      - product: 'sle-module-desktop-applications'
+        version: '{{ ansible_distribution_version }}'
+      - product: 'sle-module-development-tools'
+        version: '{{ ansible_distribution_version }}'
+      - product: 'sle-module-containers'
+        version: '{{ ansible_distribution_version }}'
+      - product: 'sle-module-server-applications'
+        version: '{{ ansible_distribution_version }}'
+      - product: 'sle-module-web-scripting'
+        version: '{{ ansible_distribution_version }}'
+      - product: 'PackageHub'
+        version: '{{ ansible_distribution_version }}'
 ```
 
 License
