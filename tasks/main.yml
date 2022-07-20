@@ -51,7 +51,7 @@
 - name: Add Subscriptions
   command: |
     {{ suseconnect_binary }} -p
-    {{- item['product'] | default(ansible_distribution) }}/
+    {{ item['product'] | default(ansible_distribution) }}/
     {{- item['version'] | default(ansible_distribution_version) }}/
     {{- item['arch'] | default(ansible_machine) }}
     {%- if item['key'] is defined %} -r {{ item['key'] }}{% endif %}
