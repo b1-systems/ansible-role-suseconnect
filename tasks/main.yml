@@ -4,22 +4,22 @@
 # Pre-Flight Checks
 
 - name: Check EUID
-  command: /usr/bin/id -u
+  ansible.builtin.command: /usr/bin/id -u
   register: suseconnect_euid
   changed_when: false
 
 - name: Fail If Not Root
-  fail:
+  ansible.builtin.fail:
     msg: 'This role needs to be executed as root'
   when: suseconnect_euid.stdout is defined and suseconnect_euid.stdout | int != 0
 
 - name: Check If SUSEConnect Is Available
-  stat:
+  ansible.builtin.stat:
     path: "{{ suseconnect_binary }}"
   register: suseconnect_bin_check
 
 - name: Fail If SUSEConnect Not Available
-  fail:
+  ansible.builtin.fail:
     msg: 'This role needs SUSEConnect available and executable!'
   when:
     - ( suseconnect_bin_check.stat.executable is defined and not suseconnect_bin_check.stat.executable) or
@@ -29,27 +29,27 @@
 # Do Stuff
 
 - name: Save Registration Status Into Temp Var
-  command: "{{ suseconnect_binary }} -s"
+  ansible.builtin.command: "{{ suseconnect_binary }} -s"
   register: _suseconnect_status
   changed_when: False
 
 - name: Convert Registration Status Into Usable Data Structure
-  set_fact:
-    suseconnect_status: "{{ suseconnect_status | combine( {
+  ansible.builtin.set_fact:
+    suseconnect_status: |
+      {{ suseconnect_status | combine({
       item['identifier']: {
         'status': item['status'],
         'version': item['version'],
         'arch': item['arch']
-      }
-    } ) }}"
+      }}) }}
   with_items: "{{ _suseconnect_status['stdout'] | default([]) }}"
 
 - name: Generate List Of Product Names
-  set_fact:
+  ansible.builtin.set_fact:
     suseconnect_product_list: "{{ suseconnect_products | map(attribute='product') | list }}"
 
 - name: Add Subscriptions
-  command: |
+  ansible.builtin.command: |
     {{ suseconnect_binary }} -p
     {{ item['product'] | default(ansible_distribution) }}/
     {{- item['version'] | default(ansible_distribution_version) }}/
@@ -63,7 +63,7 @@
   with_items: "{{ suseconnect_products }}"
 
 - name: Remove Subscriptions
-  command: |
+  ansible.builtin.command: |
     {{ suseconnect_binary }} -d -p
     {{- item['key'] | default(ansible_distribution) }}/
     {{- item['value']['version'] | default(ansible_distribution_version) }}/
@@ -75,7 +75,7 @@
   with_dict: "{{ suseconnect_status }}"
 
 - name: Deregister System
-  command: "{{ suseconnect_binary }} -d"
+  ansible.builtin.command: "{{ suseconnect_binary }} -d"
   when:
     - suseconnect_product_list | length == 0
     - suseconnect_status['SLES']['status'] != 'Not Registered'

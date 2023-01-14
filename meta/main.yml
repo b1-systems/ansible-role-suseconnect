@@ -1,5 +1,6 @@
 galaxy_info:
-  author: 'Sebastian Meyer'
+  author: 'Sebastian Meyer, Johannes Kastl'
+  namespace: 'b1-systems'
   company: 'B1 Systems GmbH'
 
   license: GPLv3
@@ -7,7 +8,7 @@ galaxy_info:
   role_name: suseconnect
   description: Register Your SLES System With SUSE Customer Center
 
-  min_ansible_version: 2.0
+  min_ansible_version: '2.12'
 
   # min_ansible_container_version:
 
@@ -16,8 +17,8 @@ galaxy_info:
   platforms:
     - name: SLES
       versions:
-      - 12
-      - 15
+        - '12'
+        - '15'
 
   galaxy_tags: []
 
