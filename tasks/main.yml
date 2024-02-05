@@ -31,17 +31,16 @@
 - name: Save Registration Status Into Temp Var
   command: "{{ suseconnect_binary }} -s"
   register: _suseconnect_status
-  changed_when: False
+  changed_when: false
 
 - name: Convert Registration Status Into Usable Data Structure
   set_fact:
-    suseconnect_status: "{{ suseconnect_status | combine( {
+    suseconnect_status: "{{ suseconnect_status | combine({
       item['identifier']: {
         'status': item['status'],
         'version': item['version'],
         'arch': item['arch']
-      }
-    } ) }}"
+      }}) }}"
   with_items: "{{ _suseconnect_status['stdout'] | default([]) }}"
 
 - name: Generate List Of Product Names
